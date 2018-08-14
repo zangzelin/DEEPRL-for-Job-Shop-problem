@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
-import gym
+# import gym
 import numpy as np
 from collections import deque
 from keras.models import Sequential
@@ -13,8 +13,9 @@ from keras.models import Model
 import keras
 import TestTheOutput
 import tensorflow as tf
+import matplotlib.pyplot as  plt
 
-EPISODES = 5000
+EPISODES = 50000
 
 
 def importdata(dataset):
@@ -209,7 +210,7 @@ if __name__ == "__main__":
     # agent.load("./save/cartpole-ddqn.h5")
     done = False
     batch_size = 32
-
+    his = []
     for e in range(EPISODES): 
         # state = env.reset()
         
@@ -223,11 +224,13 @@ if __name__ == "__main__":
         Fit2 = TestTheOutput.LineUpTheSolution(
             predictout2, path_of_machine, m, n, T, 0)
         
+        his.append(min(Fit1,Fit2))
+        # his.append(Fit1)
         if Fit1 < Fit2:
-            model.fit(stateout1,keyout1)
+            model.fit(stateout1,keyout1,epochs=1, verbose=0)
         else:
-            model.fit(stateout2,keyout2)
+            model.fit(stateout2,keyout2,epochs=1, verbose=0)
 
         
-        
+        plt.plot(his)        
         print(Fit1)
